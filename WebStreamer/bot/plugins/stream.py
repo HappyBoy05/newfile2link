@@ -58,6 +58,9 @@ async def private_receive_handler(c: Client, m: Message):
             "http://{}:{}/{}".format(Var.FQDN,
                                     Var.PORT,
                                     log_msg.message_id)
+         # stream_link = Var.URL + '/stream/' + str(log_msg.message_id)
+         # online_link = Var.URL + str(log_msg.message_id)
+        
         file_size = None
         if m.video:
             file_size = f"{humanbytes(m.video.file_size)}"
@@ -92,7 +95,8 @@ async def private_receive_handler(c: Client, m: Message):
             text=msg_text.format(file_name, file_size, stream_link),
             parse_mode="HTML", 
             disable_web_page_preview=True,
-            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ ɴᴏᴡ 📥", url=stream_link)]]),
+            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ ɴᴏᴡ 📥", url=stream_link)]]), #Stream Link
+                                              #  InlineKeyboardButton('Download', url=online_link)]]), #Download Link
             quote=True
         )
     except FloodWait as e:
