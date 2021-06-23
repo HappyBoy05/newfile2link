@@ -8,6 +8,7 @@ from aiohttp import web
 from ..bot import StreamBot
 from WebStreamer import StartTime
 from ..utils.custom_dl import TGCustomYield, chunk_size, offset_fix
+from WebStreamer.utils.render_template import render_page
 from ..utils.time_format import get_readable_time
 routes = web.RouteTableDef()
 
@@ -20,15 +21,26 @@ async def root_route_handler(request):
                               "telegram_bot": '@'+(await StreamBot.get_me()).username})
 
 
-@routes.get("/{message_id}")
+
+@routes.get("/stream/{message_id}")
 async def stream_handler(request):
+    try:
+        message_id = int(request.match_info['message_id'])
+        return web.Response(text=await render_page(message_id), content_type='text/html')
+    except ValueError as e:
+        logging.error(e)
+        raise web.HTTPNotFound
+        
+@routes.get("/download/{message_id}")
+@routes.get("/{message_id}")
+async def old_stream_handler(request):
     try:
         message_id = int(request.match_info['message_id'])
         return await media_streamer(request, message_id)
     except ValueError as e:
         logging.error(e)
         raise web.HTTPNotFound
-
+        
 
 async def media_streamer(request, message_id: int):
     range_header = request.headers.get('Range', 0)
