@@ -35,6 +35,8 @@
     This bot will give you stream links for Telegram files without the need of waiting till the download completes
 </p>
 
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
 
 ## ♢ How to make your own :
 
